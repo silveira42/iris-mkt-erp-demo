@@ -1,0 +1,63 @@
+---
+name: iris-demo-dev
+networks:
+  federated-network:
+    name: iris-demo-dev-network
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.5.0/24
+services:
+  erp-frontend:
+    container_name: iris-demo-erp-frontend-dev-c
+    image: iris-demo-erp-frontend-dev-i
+    hostname: erp-frontend
+    build:
+      context: ./erp-frontend/
+      dockerfile: ./erp-frontend/Dockerfile.dev
+    volumes:
+      - ./erp-frontend/src:/app/src
+      - ./erp-frontend/public:/app/public
+      - ./erp-frontend/assets:/app/public/assets
+    ports:
+      - 3053:3000
+    networks:
+      federated-network:
+        ipv4_address: 192.168.5.10
+  erp-backend:
+    container_name: iris-demo-erp-backend-dev-c
+    image: iris-demo-erp-backend-dev-i
+    hostname: erp-backend
+    build:
+      context: ./erp-backend
+      dockerfile: ./erp-backend/Dockerfile.dev
+    volumes:
+      - ./erp-backend/src:/app/src
+    ports:
+      - 3054:3000
+  erp-db:
+    container_name: iris-demo-erp-db-dev-c
+    hostname: erp-db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - erp-db-data:/var/lib/postgresql/data
+    networks:
+      federated-network:
+        ipv4_address: 192.168.5.155
+  marketplace-frontend:
+    container_name: iris-demo-marketplace-frontend-dev-c
+    image: iris-demo-marketplace-frontend-dev-i
+    build:
+      context: ./mkt-frontend
+      dockerfile: ./mkt-frontend/Dockerfile.dev
+    volumes:
+      - ./mkt-frontend/src:/app/src
+      - ./mkt-frontend/public:/app/public
+      - ./mkt-frontend/assets:/app/public/assets
+    ports:
+      - 3051:3000
+volumes:
+    erp-db-data:

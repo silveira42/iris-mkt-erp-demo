@@ -1,0 +1,12 @@
+[submodule "erp-frontend"]
+	path = erp-frontend
+	url = https://github.com/silveira42/erp-demo-frontend-react-ts
+[submodule "erp-backend"]
+	path = erp-backend
+	url = https://github.com/silveira42/erp-demo-backend-ts
+[submodule "mkt-frontend"]
+	path = mkt-frontend
+	url = https://github.com/silveira42/marketplace-demo-frontend-react-ts
+[submodule "iris"]
+	path = iris
+	url = https://github.com/silveira42/iris-demo
